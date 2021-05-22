@@ -375,6 +375,7 @@ void AgentuinoClass::onPduReceive(onPduReceiveCallback pduReceived)
 	_callback = pduReceived;
 }
 
+/*
 void AgentuinoClass::freePdu(SNMP_PDU *pdu)
 {
 	//
@@ -382,6 +383,7 @@ void AgentuinoClass::freePdu(SNMP_PDU *pdu)
 	memset(pdu->VALUE.data, 0, SNMP_MAX_VALUE_LEN);
 	free((char *) pdu);
 }
+*/
 
 // Create one global object
 AgentuinoClass Agentuino;

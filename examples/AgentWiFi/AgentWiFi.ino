@@ -218,9 +218,6 @@ void pduReceived()
     //
     Agentuino.responsePdu(&pdu);
   }
-  //
-  Agentuino.freePdu(&pdu);
-  //
 }
 
 void setup()

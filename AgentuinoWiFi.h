@@ -577,7 +577,7 @@ public:
 	SNMP_API_STAT_CODES requestPdu(SNMP_PDU *pdu);
 	SNMP_API_STAT_CODES responsePdu(SNMP_PDU *pdu);
 	void onPduReceive(onPduReceiveCallback pduReceived);
-	void freePdu(SNMP_PDU *pdu);
+	//void freePdu(SNMP_PDU *pdu);
 
 	// Helper functions
 
