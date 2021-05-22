@@ -16,16 +16,15 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+  
+  AgentuinoWiFi.cpp - Updated version of Eric C. Gionet's library that
+  supports WiFiNINA-based Arduinos (tested with Nano 33 IoT).
 */
 
-//
-// sketch_aug23a
-//
+#include "AgentuinoWiFi.h"
+#include <WiFiUdp.h>
 
-#include "Agentuino.h"
-#include "EthernetUdp.h"
-
-EthernetUDP Udp;
+WiFiUDP Udp;
 SNMP_API_STAT_CODES AgentuinoClass::begin()
 {
 	// set community names
