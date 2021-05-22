@@ -4,6 +4,8 @@
 * Copyright 2010 Eric C. Gionet <lavco_eg@hotmail.com>
 *
 * Update snmpGetNext by Petr Domorazek <petr@domorazek.cz>
+* 
+* Update to WiFiNINA by Paco "ANSnullANS" Lechner <contact@ansnullans.org>
 */
 #include <Streaming.h>         // Include the Streaming library
 #include <WiFiNINA.h>
