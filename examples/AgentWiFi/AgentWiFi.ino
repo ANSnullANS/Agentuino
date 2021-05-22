@@ -6,16 +6,10 @@
 * Update snmpGetNext by Petr Domorazek <petr@domorazek.cz>
 */
 #include <Streaming.h>         // Include the Streaming library
-#include <Ethernet.h>          // Include the Ethernet library
+#include <WiFiNINA.h>
 #include <SPI.h>
-#include <MemoryFree.h>
-#include <Agentuino.h> 
-#include <Flash.h>
-
-static byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-static byte ip[] = { 192, 168, 20, 6 };
-//static byte gateway[] = { 192, 168, 20, 1 };
-//static byte subnet[] = { 255, 255, 255, 0 };
+#include <AgentuinoWiFi.h>
+#include "secrets.h"
 
 //
 // tkmib - linux mib browser
@@ -51,11 +45,10 @@ static char sysServices[] PROGMEM   = "1.3.6.1.2.1.1.7.0";  // read-only  (Integ
 //
 // RFC1213 local values
 static char locDescr[]              = "Agentuino, a light-weight SNMP Agent.";  // read-only (static)
-//static char locObjectID[]         = "1.3.6.1.3.2009.0";                       // read-only (static)
 static uint32_t locUpTime           = 0;                                        // read-only (static)
-static char locContact[20]          = "Petr Domorazek";                         // should be stored/read from EEPROM - read/write (not done for simplicity)
+static char locContact[20]          = "Paco Lechner";                         // should be stored/read from EEPROM - read/write (not done for simplicity)
 static char locName[20]             = "Agentuino";                              // should be stored/read from EEPROM - read/write (not done for simplicity)
-static char locLocation[20]         = "Czech Republic";                         // should be stored/read from EEPROM - read/write (not done for simplicity)
+static char locLocation[20]         = "Austria";                         // should be stored/read from EEPROM - read/write (not done for simplicity)
 static int32_t locServices          = 6;                                        // read-only (static)
 
 uint32_t prevMillis = millis();
@@ -63,15 +56,20 @@ char oid[SNMP_MAX_OID_LEN];
 SNMP_API_STAT_CODES api_status;
 SNMP_ERR_CODES status;
 
+int iWiFiStatus = WL_IDLE_STATUS;
+IPAddress WIFI_IP;
+
 void pduReceived()
 {
   SNMP_PDU pdu;
   api_status = Agentuino.requestPdu(&pdu);
+  Serial.println(api_status);
   //
   if ((pdu.type == SNMP_PDU_GET || pdu.type == SNMP_PDU_GET_NEXT || pdu.type == SNMP_PDU_SET)
     && pdu.error == SNMP_ERR_NO_ERROR && api_status == SNMP_API_STAT_SUCCESS ) {
     //
     pdu.OID.toString(oid);
+    Serial.println(oid);
     // Implementation SNMP GET NEXT
     if ( pdu.type == SNMP_PDU_GET_NEXT ) {
       char tmpOIDfs[SNMP_MAX_OID_LEN];
@@ -225,14 +223,48 @@ void pduReceived()
 
 void setup()
 {
-  //Serial.begin(9600);
-  Ethernet.begin(mac, ip);
+    Serial.begin(9600);
+  // Wait for the serial-port to initialize.
+  if(!Serial) {
+    delay(3000);
+  }
+
+  char aSSID[] = SECRET_SSID;
+  char aPSK[] = SECRET_PASS;
+
+    // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println(F("WiFi Module Error"));
+    // don't continue
+    while (true);
+  }
+
+  #ifdef DEBUG
+    String fv = WiFi.firmwareVersion();
+    if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
+      Serial.println(F("FW Upgrade available!"));
+    }
+  #endif
+
+  Serial.print(F("Connecting."));
+
+  while (iWiFiStatus != WL_CONNECTED) {
+    Serial.print(".");
+    iWiFiStatus = WiFi.begin(aSSID, aPSK);
+    delay(5000);
+  }
+  Serial.println(F("OK"));
+  WIFI_IP = WiFi.localIP();
+
+  
   //
   api_status = Agentuino.begin();
+  Serial.println(api_status);
   //
   if ( api_status == SNMP_API_STAT_SUCCESS ) {
     //
     Agentuino.onPduReceive(pduReceived);
+    Serial.println(F("PDU Receive set"));
     //
     delay(10);
     //
