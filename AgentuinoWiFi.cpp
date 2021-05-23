@@ -275,7 +275,7 @@ SNMP_API_STAT_CODES AgentuinoClass::responsePdu(SNMP_PDU *pdu)
 	//
 	// Length of entire SNMP packet
 	_packetPos = 0;  // 23
-	_packetSize = 25 + sizeof(pdu->requestId) + sizeof(pdu->error) + sizeof(pdu->errorIndex) + pdu->OID.size + pdu->VALUE.size;
+	_packetSize = 26 + sizeof(pdu->requestId) + sizeof(pdu->error) + sizeof(pdu->errorIndex) + pdu->OID.size + pdu->VALUE.size;
 	//
 	memset(_packet, 0, SNMP_MAX_PACKET_LEN);
 	//

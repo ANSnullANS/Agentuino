@@ -25,10 +25,10 @@
 
 #define SNMP_DEFAULT_PORT	161
 #define SNMP_MIN_OID_LEN	2
-#define SNMP_MAX_OID_LEN	64 // 128
-#define SNMP_MAX_NAME_LEN	20
-#define SNMP_MAX_VALUE_LEN      64  // 128 ??? should limit this
-#define SNMP_MAX_PACKET_LEN     SNMP_MAX_VALUE_LEN + SNMP_MAX_OID_LEN + 25  //???
+#define SNMP_MAX_OID_LEN	128 // 128
+#define SNMP_MAX_NAME_LEN	40
+#define SNMP_MAX_VALUE_LEN      128  // 128 ??? should limit this
+#define SNMP_MAX_PACKET_LEN     SNMP_MAX_VALUE_LEN + SNMP_MAX_OID_LEN + 26  //???
 #define SNMP_FREE(s)   do { if (s) { free((void *)s); s=NULL; } } while(0)
 //Frees a pointer only if it is !NULL and sets its value to NULL. 
 
