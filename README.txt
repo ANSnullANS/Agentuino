@@ -4,3 +4,8 @@ Based on the version by Petr Domorazek (https://github.com/1sw/Agentuino) and up
 
 
 Supported SNMP-Version: 1
+
+Library supports WiFiUDP and EthernetUDP. To set which library to use, put one of the following #define-Blocks into your code:
+
+WiFiNINA: "#define WIFI_ENABLED true"
+Ethernet: "#define ETH_ENABLED true"
