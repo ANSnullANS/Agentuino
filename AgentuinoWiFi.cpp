@@ -22,9 +22,19 @@
 */
 
 #include "AgentuinoWiFi.h"
-#include <WiFiUdp.h>
 
-WiFiUDP Udp;
+#ifdef WIFI_ENABLED
+	#include <WiFiUdp.h>
+#else
+	#include <EthernetUdp.h>
+#endif
+
+#ifdef WIFI_ENABLED
+	WiFiUDP Udp;
+#else
+	EthernetUDP Udp;
+#endif
+	
 SNMP_API_STAT_CODES AgentuinoClass::begin()
 {
 	// set community names
